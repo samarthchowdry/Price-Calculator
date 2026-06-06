@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gold Ornament Price Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">&#9830;</span>
+        <div>
+          <h1>Gold Ornament Calculator</h1>
+          <p>Accurate pricing for jewellery & ornaments</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card calculator-card">
+      <h2>Enter Ornament Details</h2>
+
+      <form id="calculator-form" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="gross_weight">Gross Weight (grams)</label>
+            <input type="number" id="gross_weight" name="gross_weight" step="0.001" min="0.001" placeholder="e.g. 10.500" required>
+          </div>
+
+          <div class="field">
+            <label for="stone_weight">Stone / Other Weight (grams)</label>
+            <input type="number" id="stone_weight" name="stone_weight" step="0.001" min="0" value="0" placeholder="e.g. 0.250">
+          </div>
+
+          <div class="field">
+            <label for="karat">Gold Purity (Karat)</label>
+            <select id="karat" name="karat">
+              {% for k in karats %}
+              <option value="{{ k }}" {% if k == '22K' %}selected{% endif %}>{{ k }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="gold_rate_24k">24K Gold Rate (per gram)</label>
+            <div class="input-prefix">
+              <span>₹</span>
+              <input type="number" id="gold_rate_24k" name="gold_rate_24k" step="0.01" min="0.01" placeholder="e.g. 7200" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="making_charge_type">Making Charge Type</label>
+            <select id="making_charge_type" name="making_charge_type">
+              <option value="per_gram">Per Gram (₹)</option>
+              <option value="percentage">Percentage (%)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="making_charge_value" id="making_charge_label">Making Charge (₹ per gram)</label>
+            <input type="number" id="making_charge_value" name="making_charge_value" step="0.01" min="0" value="500" placeholder="e.g. 500">
+          </div>
+
+          <div class="field">
+            <label for="wastage_percent">Wastage (%)</label>
+            <input type="number" id="wastage_percent" name="wastage_percent" step="0.1" min="0" value="0" placeholder="e.g. 8">
+          </div>
+
+          <div class="field">
+            <label for="gst_percent">GST (%)</label>
+            <input type="number" id="gst_percent" name="gst_percent" step="0.1" min="0" value="3" placeholder="e.g. 3">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="calculate-btn">
+            Calculate Price
+          </button>
+          <button type="reset" class="btn btn-secondary" id="reset-btn">
+            Reset
+          </button>
+        </div>
+      </form>
+
+      <div id="error-message" class="error-message hidden" role="alert"></div>
+    </section>
+
+    <section class="card result-card hidden" id="result-section">
+      <h2>Price Breakdown</h2>
+
+      <div class="total-banner">
+        <span class="total-label">Total Price</span>
+        <span class="total-value" id="total_price">₹0.00</span>
+      </div>
+
+      <ul class="breakdown-list">
+        <li>
+          <span>Net Gold Weight</span>
+          <strong id="net_gold_weight">—</strong>
+        </li>
+        <li>
+          <span>Purity Factor</span>
+          <strong id="purity_factor">—</strong>
+        </li>
+        <li>
+          <span>Effective Weight (incl. wastage)</span>
+          <strong id="effective_weight">—</strong>
+        </li>
+        <li>
+          <span>Gold Rate (per gram)</span>
+          <strong id="gold_rate_per_gram">—</strong>
+        </li>
+        <li>
+          <span>Gold Value</span>
+          <strong id="gold_value">—</strong>
+        </li>
+        <li>
+          <span>Making Charges</span>
+          <strong id="making_charges">—</strong>
+        </li>
+        <li>
+          <span>Subtotal</span>
+          <strong id="subtotal">—</strong>
+        </li>
+        <li>
+          <span>GST</span>
+          <strong id="gst_amount">—</strong>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Gold Ornament Price Calculator &mdash; Built for jewellers & customers</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
